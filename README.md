@@ -19,15 +19,8 @@
 ## Alpha Sprint Meetings
 
 _5/15/2025_
-During the Alpha Sprint, our team maintained communication through:
-
-* Channel 1
-* Channel 2
-* Channel 3
+We communicated throughout the spring through Discord messages. We also had one long meeting on Friday May 2nd from 10am-1pm.
 
 ## Alpha Sprint Comments
 
-* Comment 1
-* Comment 2
-* Comment 3
-* Comment 4
+No issue. Everything working well. 
