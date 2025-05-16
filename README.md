@@ -9,8 +9,8 @@
 ## Team Members and Contributions
 
 - Johan Hernandez
-    - Deployed Heroku App
-    - Github Repo
+    - Deployed the Front-End with Vercel App
+    - Setting up Github Repo
 - Sopheanith Ny
     - Updated README.md
 - Yonas Omega
