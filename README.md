@@ -19,6 +19,7 @@
 ## Alpha Sprint Meetings
 
 _5/15/2025_
+
 We communicated throughout the spring through Discord messages. We also had one long meeting on Friday May 2nd from 10am-1pm.
 
 ## Alpha Sprint Comments
