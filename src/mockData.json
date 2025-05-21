@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "isbn13": 9780439023480,
+    "authors": "Suzanne Collins",
+    "publication": 2008,
+    "original_title": "The Hunger Games",
+    "title": "The Hunger Games (The Hunger Games, #1)",
+    "ratings": {
+      "average": 4.34,
+      "count": 4780653,
+      "rating_1": 66715,
+      "rating_2": 127936,
+      "rating_3": 560092,
+      "rating_4": 1481305,
+      "rating_5": 2706317
+    },
+    "icons": {
+      "large": "https://images.gr-assets.com/books/1447303603m/2767052.jpg",
+      "small": "https://images.gr-assets.com/books/1447303603s/2767052.jpg"
+    }
+  },
+  {
+    "id": 2,
+    "isbn13": 9780439554930,
+    "authors": "J.K. Rowling, Mary GrandPré",
+    "publication": 1997,
+    "original_title": "Harry Potter and the Philosopher's Stone",
+    "title": "Harry Potter and the Sorcerer's Stone (Harry Potter, #1)",
+    "ratings": {
+      "average": 4.44,
+      "count": 4602479,
+      "rating_1": 75504,
+      "rating_2": 101676,
+      "rating_3": 455024,
+      "rating_4": 1156318,
+      "rating_5": 3011543
+    },
+    "icons": {
+      "large": "https://images.gr-assets.com/books/1474154022m/3.jpg",
+      "small": "https://images.gr-assets.com/books/1474154022s/3.jpg"
+    }
+  },
+  {
+    "id": 3,
+    "isbn13": 9780316015840,
+    "authors": "Stephenie Meyer",
+    "publication": 2005,
+    "original_title": "Twilight",
+    "title": "Twilight (Twilight, #1)",
+    "ratings": {
+      "average": 3.57,
+      "count": 3866839,
+      "rating_1": 456191,
+      "rating_2": 436802,
+      "rating_3": 793319,
+      "rating_4": 875073,
+      "rating_5": 1355439
+    },
+    "icons": {
+      "large": "https://images.gr-assets.com/books/1361039443m/41865.jpg",
+      "small": "https://images.gr-assets.com/books/1361039443s/41865.jpg"
+    }
+  },
+  {
+    "id": 4,
+    "isbn13": 9780061120080,
+    "authors": "Harper Lee",
+    "publication": 1960,
+    "original_title": "To Kill a Mockingbird",
+    "title": "To Kill a Mockingbird",
+    "ratings": {
+      "average": 4.25,
+      "count": 3198671,
+      "rating_1": 60427,
+      "rating_2": 117415,
+      "rating_3": 446835,
+      "rating_4": 1001952,
+      "rating_5": 1714267
+    },
+    "icons": {
+      "large": "https://images.gr-assets.com/books/1361975680m/2657.jpg",
+      "small": "https://images.gr-assets.com/books/1361975680s/2657.jpg"
+    }
+  }
+]
