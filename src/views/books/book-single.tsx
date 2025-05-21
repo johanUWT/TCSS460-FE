@@ -52,7 +52,7 @@ export default function BookSingle({ isbn }: { isbn: string }) {
       {/* Rating Section */}
       <Box>
         <Typography variant="h1" gutterBottom>
-          {ratings.average.toFixed(2)}
+          {ratings.average.toFixed(1)}
           <Typography variant="body2" color="text.secondary">
             average rating
           </Typography>
