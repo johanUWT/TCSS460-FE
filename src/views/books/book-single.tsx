@@ -63,10 +63,10 @@ export default function BookSingle({ isbn }: { isbn: string }) {
   const total = Object.values(starCounts).reduce((a, b) => a + b, 0);
   const average =
     total === 0
-      ? 0
+      ? '0'
       : ((1 * starCounts[1] + 2 * starCounts[2] + 3 * starCounts[3] + 4 * starCounts[4] + 5 * starCounts[5]) / total).toFixed(1);
 
-  const handleSubmit = () => {
+  const handleRatingSubmit = () => {
     console.log('Submitted star counts:', starCounts);
     setInitialCounts({ ...starCounts });
     setHasChanges(false);
@@ -187,7 +187,7 @@ export default function BookSingle({ isbn }: { isbn: string }) {
           })}
         </Stack>
 
-        <Button variant="contained" sx={{ mt: 3 }} onClick={handleSubmit} disabled={!hasChanges}>
+        <Button variant="contained" sx={{ mt: 3 }} onClick={handleRatingSubmit} disabled={!hasChanges}>
           Submit
         </Button>
       </Box>
