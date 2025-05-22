@@ -1,15 +1,30 @@
-import { LinearProgress, Box, Divider, Rating, Stack, Typography } from '@mui/material';
+'use cilent';
+import { LinearProgress, Box, Divider, Rating, Stack, Typography, Skeleton } from '@mui/material';
 import books from 'mockData.json';
 import { notFound } from 'next/navigation';
 import { IBook } from 'types/book';
+import { useEffect, useState } from 'react';
 
 const getRatingPercentage = (count: number, total: number) => (total === 0 ? 0 : (count / total) * 100);
 
 export default function BookSingle({ isbn }: { isbn: string }) {
-  const book: IBook | undefined = books.find((book) => book.isbn13 === Number(isbn));
+  const [book, setBook] = useState<IBook | null>(null);
+
+  useEffect(() => {
+    async function fetchBook() {
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate network delay
+      const bookData = books.find((book) => book.isbn13 === Number(isbn));
+      if (!bookData) {
+        notFound();
+      } else {
+        setBook(bookData);
+      }
+    }
+    fetchBook();
+  }, [isbn]);
 
   if (!book) {
-    return notFound();
+    return <BookSingleSkeleton />;
   }
 
   const { ratings } = book;
@@ -79,6 +94,31 @@ export default function BookSingle({ isbn }: { isbn: string }) {
           ))}
         </Stack>
       </Box>
+    </Box>
+  );
+}
+
+function BookSingleSkeleton() {
+  return (
+    <Box sx={{ maxWidth: 900, mx: 'auto', p: 4 }}>
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={4} alignItems="flex-start">
+        <Skeleton variant="rectangular" width={200} height={300} />
+        <Stack>
+          <Skeleton variant="text" width={260} />
+          <Skeleton variant="text" width={280} />
+          <Skeleton variant="text" width={240} />
+          <Skeleton variant="text" width={250} />
+        </Stack>
+      </Stack>
+      <Stack spacing={1} sx={{ mt: 4 }}>
+        <Skeleton variant="text" width="20%" />
+        <Stack spacing={1} sx={{ mt: 2 }}>
+          <Skeleton variant="text" width={220} />
+          <Skeleton variant="text" width={280} />
+          <Skeleton variant="text" width={260} />
+          <Skeleton variant="text" width={250} />
+        </Stack>
+      </Stack>
     </Box>
   );
 }
