@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 import books from 'mockData.json';
 import { IBook } from 'types/book';
 
-{/* Main BooksList component */}
+{
+  /* Main BooksList component */
+}
 export default function BooksList() {
   return (
     <div className="container mx-auto px-4 py-8">
@@ -27,7 +29,9 @@ export default function BooksList() {
   );
 }
 
-{/* Individual book card component */}
+{
+  /* Individual book card component */
+}
 const BookCard = ({ book }: { book: IBook }) => {
   const router = useRouter();
 
