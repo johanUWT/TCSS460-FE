@@ -1,0 +1,149 @@
+[
+  {
+    "id": 1,
+    "isbn13": 9780439023480,
+    "authors": "Suzanne Collins",
+    "publication": 2008,
+    "original_title": "The Hunger Games",
+    "title": "The Hunger Games (The Hunger Games, #1)",
+    "ratings": {
+      "average": 4.34,
+      "count": 4780653,
+      "rating_1": 66715,
+      "rating_2": 127936,
+      "rating_3": 560092,
+      "rating_4": 1481305,
+      "rating_5": 2706317
+    },
+    "icons": {
+      "large": "https://images.gr-assets.com/books/1447303603m/2767052.jpg",
+      "small": "https://images.gr-assets.com/books/1447303603s/2767052.jpg"
+    }
+  },
+  {
+    "id": 2,
+    "isbn13": 9780439554930,
+    "authors": "J.K. Rowling, Mary GrandPré",
+    "publication": 1997,
+    "original_title": "Harry Potter and the Philosopher's Stone",
+    "title": "Harry Potter and the Sorcerer's Stone (Harry Potter, #1)",
+    "ratings": {
+      "average": 4.44,
+      "count": 4602479,
+      "rating_1": 75504,
+      "rating_2": 101676,
+      "rating_3": 455024,
+      "rating_4": 1156318,
+      "rating_5": 3011543
+    },
+    "icons": {
+      "large": "https://images.gr-assets.com/books/1474154022m/3.jpg",
+      "small": "https://images.gr-assets.com/books/1474154022s/3.jpg"
+    }
+  },
+  {
+    "id": 3,
+    "isbn13": 9780316015840,
+    "authors": "Stephenie Meyer",
+    "publication": 2005,
+    "original_title": "Twilight",
+    "title": "Twilight (Twilight, #1)",
+    "ratings": {
+      "average": 3.57,
+      "count": 3866839,
+      "rating_1": 456191,
+      "rating_2": 436802,
+      "rating_3": 793319,
+      "rating_4": 875073,
+      "rating_5": 1355439
+    },
+    "icons": {
+      "large": "https://images.gr-assets.com/books/1361039443m/41865.jpg",
+      "small": "https://images.gr-assets.com/books/1361039443s/41865.jpg"
+    }
+  },
+  {
+    "id": 4,
+    "isbn13": 9780061120080,
+    "authors": "Harper Lee",
+    "publication": 1960,
+    "original_title": "To Kill a Mockingbird",
+    "title": "To Kill a Mockingbird",
+    "ratings": {
+      "average": 4.25,
+      "count": 3198671,
+      "rating_1": 60427,
+      "rating_2": 117415,
+      "rating_3": 446835,
+      "rating_4": 1001952,
+      "rating_5": 1714267
+    },
+    "icons": {
+      "large": "https://images.gr-assets.com/books/1361975680m/2657.jpg",
+      "small": "https://images.gr-assets.com/books/1361975680s/2657.jpg"
+    }
+  },
+  {
+    "id": 5,
+    "isbn13": 9780439358071,
+    "authors": "J.K. Rowling, Mary GrandPré",
+    "publication": 2003,
+    "original_title": "Harry Potter and the Order of the Phoenix",
+    "title": "Harry Potter and the Order of the Phoenix (Harry Potter, #5)",
+    "ratings": {
+      "average": 4.49,
+      "count": 2140567,
+      "rating_1": 31524,
+      "rating_2": 50843,
+      "rating_3": 245876,
+      "rating_4": 658432,
+      "rating_5": 1153892
+    },
+    "icons": {
+      "large": "https://images.gr-assets.com/books/1546910265m/2.jpg",
+      "small": "https://images.gr-assets.com/books/1546910265s/2.jpg"
+    }
+  },
+  {
+    "id": 6,
+    "isbn13": 9780743273565,
+    "authors": "F. Scott Fitzgerald",
+    "publication": 1925,
+    "original_title": "The Great Gatsby",
+    "title": "The Great Gatsby",
+    "ratings": {
+      "average": 3.93,
+      "count": 3845203,
+      "rating_1": 170234,
+      "rating_2": 298567,
+      "rating_3": 1023456,
+      "rating_4": 1345678,
+      "rating_5": 1007268
+    },
+    "icons": {
+      "large": "https://images.gr-assets.com/books/1490528560m/4671.jpg",
+      "small": "https://images.gr-assets.com/books/1490528560s/4671.jpg"
+    }
+  },
+  {
+    "id": 7,
+    "isbn13": 9780679783268,
+    "authors": "Jane Austen",
+    "publication": 1813,
+    "original_title": "Pride and Prejudice",
+    "title": "Pride and Prejudice",
+    "ratings": {
+      "average": 4.28,
+      "count": 2962745,
+      "rating_1": 45632,
+      "rating_2": 78945,
+      "rating_3": 298567,
+      "rating_4": 987654,
+      "rating_5": 1551947
+    },
+    "icons": {
+      "large": "https://images.gr-assets.com/books/1320399351m/1885.jpg",
+      "small": "https://images.gr-assets.com/books/1320399351s/1885.jpg"
+    }
+  }
+]
