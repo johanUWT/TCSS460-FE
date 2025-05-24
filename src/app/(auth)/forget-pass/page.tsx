@@ -1,7 +1,7 @@
-import ForgotPassword from 'views/auth/forgot-password';
+import ChangePassword from 'views/auth/change-password';
 
 // ==============================|| PAGE ||============================== //
 
-export default function ForgotPasswordPage() {
-  return <ForgotPassword />;
+export default function ChangePasswordPage() {
+  return <ChangePassword />;
 }
