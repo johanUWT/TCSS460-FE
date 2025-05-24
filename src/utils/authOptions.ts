@@ -50,6 +50,7 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         firstname: { name: 'firstname', label: 'First Name', type: 'text', placeholder: 'Enter First Name' },
         lastname: { name: 'lastname', label: 'Last Name', type: 'text', placeholder: 'Enter Last Name' },
+        phonenumber: { name: 'phonenumber', label: 'Phone Number', type: 'text', placeholder: 'Enter Phone Number' },
         email: { name: 'email', label: 'Email', type: 'email', placeholder: 'Enter Email' },
         company: { name: 'company', label: 'Company', type: 'text', placeholder: 'Enter Company' },
         password: { name: 'password', label: 'Password', type: 'password', placeholder: 'Enter Password' }
@@ -64,7 +65,7 @@ export const authOptions: NextAuthOptions = {
             email: credentials?.email,
             role: 1,
             username: credentials?.email,
-            phone: getRandomPhoneNumber() // TODO request phone number from user
+            phone: credentials?.phonenumber
           });
 
           if (user) {
