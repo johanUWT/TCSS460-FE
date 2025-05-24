@@ -65,6 +65,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
         initialValues={{
           firstname: '',
           lastname: '',
+          phonenumber: '',
           email: '',
           company: '',
           password: '',
@@ -73,6 +74,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
         validationSchema={Yup.object().shape({
           firstname: Yup.string().max(255).required('First Name is required'),
           lastname: Yup.string().max(255).required('Last Name is required'),
+          phonenumber: Yup.string().matches(/^((\d{3})|\d{3})[- ]?\d{3}[- ]?\d{4}$/, 'Phone number is not valid').max(15, 'Phone number must be less than 15 characters'),
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
           password: Yup.string()
             .required('Password is required')
@@ -85,6 +87,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
             redirect: false,
             firstname: values.firstname,
             lastname: values.lastname,
+            phonenumber: values.phonenumber,
             email: trimmedEmail,
             password: values.password,
             company: values.company,
@@ -184,6 +187,27 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                 {touched.email && errors.email && (
                   <FormHelperText error id="helper-text-email-signup">
                     {errors.email}
+                  </FormHelperText>
+                )}
+              </Grid>
+              <Grid item xs={6}>
+                <Stack spacing={1}>
+                  <InputLabel htmlFor="phonenumber-signup">Phone Number*</InputLabel>
+                  <OutlinedInput
+                    id="phonenumber-signup"
+                    type="phonenumber"
+                    value={values.phonenumber}
+                    name="phonenumber"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    placeholder="Enter your Phone Number"
+                    fullWidth
+                    error={Boolean(touched.phonenumber && errors.phonenumber)}
+                  />
+                </Stack>
+                {touched.phonenumber && errors.phonenumber && (
+                  <FormHelperText error id="helper-text-phonenumber-signup">
+                    {errors.phonenumber}
                   </FormHelperText>
                 )}
               </Grid>
