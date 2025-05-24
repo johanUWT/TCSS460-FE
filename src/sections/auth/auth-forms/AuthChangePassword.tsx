@@ -50,7 +50,7 @@ export default function AuthChangePassword() {
 
           openSnackbar({
             open: true,
-            message: 'Check mail for reset password link',
+            message: 'Password changed successfully',
             variant: 'alert',
             alert: {
               color: 'success'
@@ -93,8 +93,8 @@ export default function AuthChangePassword() {
                   error={Boolean(touched.oldPassword && errors.oldPassword)}
                   id="old-password-forgot"
                   type="password"
-                  value={values.newPassword}
-                  name="newPassword"
+                  value={values.oldPassword}
+                  name="oldPassword"
                   onBlur={handleBlur}
                   onChange={handleChange}
                   placeholder="Enter old password"
@@ -107,7 +107,7 @@ export default function AuthChangePassword() {
                   id="new-password-forgot"
                   type="password"
                   value={values.newPassword}
-                  name="oldPassword"
+                  name="newPassword"
                   onBlur={handleBlur}
                   onChange={handleChange}
                   placeholder="Enter new password"
