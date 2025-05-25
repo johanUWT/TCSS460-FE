@@ -38,3 +38,32 @@ We communicated throughout the spring through Discord messages.
 #### Comments
 
 No issue. Everything working well.
+
+### Beta I Sprint
+
+_5/18/2025 - 5/24/2025_
+
+#### Contributions
+
+- Johan Hernandez
+  - Created page to view a single book
+- Sopheanith Ny
+  - Created page to view multiple books
+- Yonas Omega
+  - Updated user registration form to include phone number
+- Austin Bomhold
+  - Updated form used to reset password
+
+#### Meetings
+
+_5/23/2025_
+
+We met over a Discord call to showcase what we completed and discuss what needed to get done
+
+_5/24/2025_
+
+We met over Discord to peer program some requirements
+
+#### Comments
+
+N/A
