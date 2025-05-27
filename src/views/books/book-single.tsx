@@ -2,8 +2,7 @@
 import { LinearProgress, Box, Divider, Rating, Stack, Typography, Skeleton, IconButton, Button, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import books from 'mockData.json';
-import { notFound } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { IBook } from 'types/book';
 import { useEffect, useState } from 'react';
 import axios from 'utils/axios';
@@ -15,6 +14,7 @@ export default function BookSingle({ isbn }: { isbn: string }) {
   const [starCounts, setStarCounts] = useState<Record<number, number> | null>(null);
   const [initialCounts, setInitialCounts] = useState<Record<number, number> | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchBook() {
@@ -34,11 +34,11 @@ export default function BookSingle({ isbn }: { isbn: string }) {
         setHasChanges(false);
       } catch (error) {
         console.error('Error fetching book:', error);
-        notFound();
+        router.push('/404'); // Redirect to 404 if book not found
       }
     }
     fetchBook();
-  }, [isbn]);
+  }, [isbn, router]);
 
   // Warn user if there are unsaved changes
   useEffect(() => {
