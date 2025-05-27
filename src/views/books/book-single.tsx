@@ -18,7 +18,6 @@ export default function BookSingle({ isbn }: { isbn: string }) {
 
   useEffect(() => {
     async function fetchBook() {
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate network delay
       try {
         const bookResponse = await axios.get(`/book/isbn/${isbn}`);
         const bookData = bookResponse.data.entry as IBook;
@@ -71,8 +70,27 @@ export default function BookSingle({ isbn }: { isbn: string }) {
 
   const handleRatingSubmit = () => {
     console.log('Submitted star counts:', starCounts);
-    setInitialCounts({ ...starCounts });
-    setHasChanges(false);
+    axios
+      .patch('/book/rating', {
+        id: book.id,
+        rating_1_star: starCounts[1],
+        rating_2_star: starCounts[2],
+        rating_3_star: starCounts[3],
+        rating_4_star: starCounts[4],
+        rating_5_star: starCounts[5]
+      })
+      .then(() => {
+        console.log('Rating updated successfully');
+        setInitialCounts({ ...starCounts });
+      })
+      .catch((error) => {
+        console.error('Error updating rating:', error);
+        alert('Failed to update rating. Please try again later.');
+        setStarCounts({ ...initialCounts }); // Reset to initial counts on error
+      })
+      .finally(() => {
+        setHasChanges(false);
+      });
   };
 
   return (
