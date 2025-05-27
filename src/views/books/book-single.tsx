@@ -6,6 +6,7 @@ import books from 'mockData.json';
 import { notFound } from 'next/navigation';
 import { IBook } from 'types/book';
 import { useEffect, useState } from 'react';
+import axios from 'utils/axios';
 
 const getRatingPercentage = (count: number, total: number) => (total === 0 ? 0 : (count / total) * 100);
 
@@ -18,10 +19,9 @@ export default function BookSingle({ isbn }: { isbn: string }) {
   useEffect(() => {
     async function fetchBook() {
       await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate network delay
-      const bookData = books.find((book) => book.isbn13 === Number(isbn));
-      if (!bookData) {
-        notFound();
-      } else {
+      try {
+        const bookResponse = await axios.get(`/book/isbn/${isbn}`);
+        const bookData = bookResponse.data.entry as IBook;
         const initial = {
           5: bookData.ratings.rating_5,
           4: bookData.ratings.rating_4,
@@ -33,6 +33,9 @@ export default function BookSingle({ isbn }: { isbn: string }) {
         setStarCounts(initial);
         setInitialCounts(initial);
         setHasChanges(false);
+      } catch (error) {
+        console.error('Error fetching book:', error);
+        notFound();
       }
     }
     fetchBook();
