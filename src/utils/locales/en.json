@@ -13,5 +13,8 @@
   "sample-page": "Sample Page",
   "send-message": "Send Message",
   "under-construction": "Under Construction",
-  "view-messages": "View Messages"
+  "view-messages": "View Messages",
+  "books": "Books",
+  "list-books": "View Books",
+  "create-book": "Create Book"
 }
