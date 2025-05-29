@@ -23,6 +23,7 @@ import { openSnackbar } from 'api/snackbar';
 
 // types
 import { SnackbarProps } from 'types/snackbar';
+import axios from 'utils/axios';
 
 // ============================|| FIREBASE - FORGOT PASSWORD ||============================ //
 
@@ -45,8 +46,30 @@ export default function AuthChangePassword() {
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
-          setStatus({ success: true });
+          setStatus({ success: false });
           setSubmitting(false);
+
+          axios
+            .patch('password/changepassword/', {
+              email: values.email,
+              oldPassword: values.oldPassword,
+              newPassword: values.newPassword
+            })
+            .then(
+              (res: any) => {
+                if (res?.error) {
+                  setErrors({ submit: res.error });
+                  setSubmitting(false);
+                } else {
+                  setStatus({ success: true });
+                  setSubmitting(false);
+                }
+              },
+              (res) => {
+                setErrors({ submit: res.error });
+                setSubmitting(false);
+              }
+            );
 
           openSnackbar({
             open: true,
@@ -56,7 +79,6 @@ export default function AuthChangePassword() {
               color: 'success'
             }
           } as SnackbarProps);
-
           setTimeout(() => {
             router.push('/check-mail');
           }, 1500);
