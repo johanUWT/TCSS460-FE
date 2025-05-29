@@ -1,19 +1,23 @@
 'use client';
-import BooksList from 'views/books/books-list';
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { IBook } from 'types/book';
+// import BooksList from 'views/books/books-list';
+// import { useRouter } from 'next/navigation';
+// import { useState } from 'react';
+// import { IBook } from 'types/book';
 import { Box, Container, Input, InputLabel, Stack, Select, MenuItem, FormHelperText } from '@mui/material';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'utils/axios';
+import { AxiosResponse } from 'axios';
 
 // ==============================|| BOOKS LIST PAGE ||============================== //
 
 export default function BooksListPage() {
-  const router = useRouter();
-  const [books, setBooks] = useState<IBook[]>([]);
+  // const router = useRouter();
+  // const [books, setBooks] = useState<IBook[]>([]);
 
-  function handleSearch() {}
+  function handleResponse(res: AxiosResponse) {
+    console.log('Search results:', res.data);
+  }
 
   return (
     <Container>
@@ -25,12 +29,23 @@ export default function BooksListPage() {
         validationSchema={Yup.object().shape({
           query: Yup.string()
             .required('Search query is required')
-            .test('no-leading-trailing-whitespace', 'Query cannot start or end with spaces', (value) => value === value.trim())
-            .min(2, 'Query must be at least 2 characters long'),
+            .test('no-leading-trailing-whitespace', 'Query cannot start or end with spaces', (value) => value === value.trim()),
           category: Yup.string().oneOf(['title', 'author', 'isbn', 'rating', 'year'], 'Invalid search category')
         })}
         onSubmit={(values, { setErrors, setSubmitting }) => {
-          console.log('Search values:', values);
+          setSubmitting(true);
+          axios
+            .get(`/book/${values.category}/${values.query}`)
+            .then((res) => {
+              handleResponse(res);
+            })
+            .catch((error) => {
+              console.error('Error fetching books:', error);
+              setErrors({ query: 'No books found for this query' });
+            })
+            .finally(() => {
+              setSubmitting(false);
+            });
         }}
       >
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
