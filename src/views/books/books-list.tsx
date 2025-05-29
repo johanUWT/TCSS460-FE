@@ -2,13 +2,12 @@
 import { Box } from '@mui/material';
 //import { Rating , Box } from '@mui/material'; //if you want to enable the rating
 import { useRouter } from 'next/navigation';
-import books from 'mockData.json';
 import { IBook } from 'types/book';
 
 {
   /* Main BooksList component */
 }
-export default function BooksList() {
+export default function BooksList({ books }: { books: IBook[] }) {
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
