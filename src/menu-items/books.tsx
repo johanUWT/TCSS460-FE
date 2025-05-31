@@ -23,14 +23,14 @@ const pages: NavItemType = {
       type: 'item',
       url: '/books',
       icon: icons.BookRounded
+    },
+    {
+      id: 'create-book',
+      title: <FormattedMessage id="create-book" />,
+      type: 'item',
+      url: '/create',
+      icon: icons.PlusOne
     }
-    // {
-    //   id: 'create-book',
-    //   title: <FormattedMessage id="create-book" />,
-    //   type: 'item',
-    //   url: '/books/create',
-    //   icon: icons.PlusOne
-    // }
   ]
 };
 
