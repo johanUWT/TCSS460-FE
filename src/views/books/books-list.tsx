@@ -1,37 +1,32 @@
 'use client';
-import { Box } from '@mui/material';
-//import { Rating , Box } from '@mui/material'; //if you want to enable the rating
+import { Box, Typography, Paper, Grid } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import books from 'mockData.json';
 import { IBook } from 'types/book';
 
-{
-  /* Main BooksList component */
-}
-export default function BooksList() {
+export default function BooksList({ books }: { books: IBook[] }) {
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Book Library</h1>
-      </div>
+    <Box mt={4}>
+      <Typography variant="h4" gutterBottom>
+        Book List
+      </Typography>
 
-      {/* Books grid */}
-      <div className="grid gap-6">
-        {books.map((book: IBook) => (
-          <BookCard key={book.id} book={book} />
-        ))}
-      </div>
-
-      {/* Footer note */}
-      <div className="mt-12 text-center"></div>
-    </div>
+      {books.length === 0 ? (
+        <Typography variant="body1" color="text.secondary" align="center" mt={4}>
+          No books to display.
+        </Typography>
+      ) : (
+        <Grid container spacing={3}>
+          {books.map((book: IBook) => (
+            <Grid item xs={12} key={book.id}>
+              <BookCard book={book} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </Box>
   );
 }
 
-{
-  /* Individual book card component */
-}
 const BookCard = ({ book }: { book: IBook }) => {
   const router = useRouter();
 
@@ -45,69 +40,73 @@ const BookCard = ({ book }: { book: IBook }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-4 h-full">
-      <div className="flex gap-4 h-full">
-        {/* Book cover - Clickable */}
-        <div className="flex-shrink-0">
-          <Box
-            component="img"
-            src={book.icons.large}
-            alt={book.title}
-            onClick={handleImageClick}
-            sx={{
-              width: 120,
-              height: 180,
-              borderRadius: 2,
-              objectFit: 'cover',
-              cursor: 'pointer',
-              '&:hover': {
-                opacity: 0.8,
-                transform: 'scale(1.02)',
-                transition: 'all 0.2s ease-in-out'
-              }
-            }}
-          />
-        </div>
+    <Paper
+      elevation={3}
+      sx={{
+        p: 2,
+        display: 'flex',
+        alignItems: 'flex-start',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 }
+      }}
+      onClick={handleBookClick}
+    >
+      <Box
+        component="img"
+        src={book.icons.large}
+        alt={book.title}
+        onClick={handleImageClick}
+        sx={{
+          width: 120,
+          height: 180,
+          objectFit: 'cover',
+          borderRadius: 1,
+          mr: 2,
+          '&:hover': {
+            opacity: 0.85,
+            transform: 'scale(1.02)',
+            transition: 'all 0.2s ease-in-out'
+          }
+        }}
+      />
+      <Box flex={1}>
+        <Typography variant="h5" sx={{ mb: 0.5 }}>
+          {book.title}
+        </Typography>
 
-        {/* Book information */}
-        <div className="flex-1 flex flex-col">
-          <h3
-            className="text-lg font-semibold text-gray-900 mb-1 cursor-pointer hover:text-blue-600 transition-colors"
-            onClick={handleBookClick}
-          >
-            {book.title}
-          </h3>
+        {book.original_title !== book.title && (
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+            Original Title: {book.original_title}
+          </Typography>
+        )}
 
-          {book.original_title !== book.title && <p className="text-sm text-gray-600 mb-1">Original Title: {book.original_title}</p>}
+        <Typography variant="body1" sx={{ mb: 1 }}>
+          Author(s): <strong>{book.authors}</strong>
+        </Typography>
 
-          <p className="text-md text-gray-700 mb-2">
-            Author(s): <span className="font-medium">{book.authors}</span>
-          </p>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Published: {book.publication}
+        </Typography>
 
-          <p className="text-sm text-gray-600 mb-3">Published: {book.publication}</p>
+        {/* Uncomment if you want to add Rating later */}
+        {/* <Box sx={{ mb: 2 }}>
+          <StarRating rating={book.ratings.average} count={book.ratings.count} />
+        </Box> */}
 
-          {/* <div className="mb-3">
-            <StarRating rating={book.ratings.average} count={book.ratings.count} />
-          </div> */}
-
-          <div className="mt-auto pt-3 border-t border-gray-200">
-            <p className="text-xs text-gray-500">ISBN-13: {book.isbn13}</p>
-            <br />
-          </div>
-        </div>
-      </div>
-    </div>
+        <Typography variant="caption" color="text.secondary">
+          ISBN-13: {book.isbn13}
+        </Typography>
+      </Box>
+    </Paper>
   );
 };
 
-// {/* Use Material UI Rating component similar like the single book UI*/}
-// const StarRating = ({ rating, count }: { rating: number; count: number }) => {
-//   return (
-//     <div className="flex items-center gap-2">
-//       <Rating value={rating} precision={0.1} readOnly size="small" />
-//       <span className="text-sm text-gray-600">
-//         {rating.toFixed(2)} ({count.toLocaleString()} ratings)
-//       </span>
-//     </div>
-//   );
-// };
+// Optional Rating UI using MUI
+// const StarRating = ({ rating, count }: { rating: number; count: number }) => (
+//   <Box display="flex" alignItems="center" gap={1}>
+//     <Rating value={rating} precision={0.1} readOnly size="small" />
+//     <Typography variant="body2" color="text.secondary">
+//       {rating.toFixed(2)} ({count.toLocaleString()} ratings)
+//     </Typography>
+//   </Box>
+// );
