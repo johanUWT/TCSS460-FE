@@ -7,7 +7,6 @@ import {
   TextField,
   Button,
   Typography,
-  Paper,
   Grid,
   Alert,
   CircularProgress,
@@ -18,7 +17,6 @@ import {
   Chip,
   OutlinedInput
 } from '@mui/material';
-//import { IBook } from 'types/book';
 
 interface CreateBookFormData {
   title: string;
@@ -189,244 +187,193 @@ export default function CreateBookPage() {
       <Box component="form" onSubmit={handleSubmit}>
         <Grid container spacing={3}>
           {/* Basic Information */}
+
+          <Grid item xs={12} md={8}>
+            <TextField
+              fullWidth
+              label="Title *"
+              value={formData.title}
+              onChange={handleInputChange('title')}
+              variant="outlined"
+              required
+            />
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <TextField
+              fullWidth
+              label="Language"
+              value={formData.language}
+              onChange={handleInputChange('language')}
+              variant="outlined"
+            />
+          </Grid>
+
+          <Grid item xs={12} md={8}>
+            <TextField
+              fullWidth
+              label="Original Title"
+              value={formData.original_title}
+              onChange={handleInputChange('original_title')}
+              variant="outlined"
+              helperText="Leave blank if same as title"
+            />
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <TextField
+              fullWidth
+              label="Pages"
+              type="number"
+              value={formData.pages}
+              onChange={handleInputChange('pages')}
+              variant="outlined"
+              inputProps={{ min: 1 }}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="Author(s) *"
+              value={formData.authors}
+              onChange={handleInputChange('authors')}
+              variant="outlined"
+              required
+              helperText="Separate multiple authors with commas"
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="Publisher"
+              value={formData.publisher}
+              onChange={handleInputChange('publisher')}
+              variant="outlined"
+            />
+          </Grid>
+
+          {/* Publication Details */}
           <Grid item xs={12}>
-            <Typography variant="h6" className="text-gray-800 mb-3">
-              Basic Information
+            <Typography variant="h6" className="text-gray-800 mb-3 mt-4">
+              Publication Details
             </Typography>
           </Grid>
 
-            <Grid item xs={12} md={8}>
-              <TextField
-                fullWidth
-                label="Title *"
-                value={formData.title}
-                onChange={handleInputChange('title')}
-                variant="outlined"
-                required
-              />
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                label="Language"
-                value={formData.language}
-                onChange={handleInputChange('language')}
-                variant="outlined"
-              />
-            </Grid>
-
-            <Grid item xs={12} md={8}>
-              <TextField
-                fullWidth
-                label="Original Title"
-                value={formData.original_title}
-                onChange={handleInputChange('original_title')}
-                variant="outlined"
-                helperText="Leave blank if same as title"
-              />
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                label="Pages"
-                type="number"
-                value={formData.pages}
-                onChange={handleInputChange('pages')}
-                variant="outlined"
-                inputProps={{ min: 1 }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Author(s) *"
-                value={formData.authors}
-                onChange={handleInputChange('authors')}
-                variant="outlined"
-                required
-                helperText="Separate multiple authors with commas"
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Publisher"
-                value={formData.publisher}
-                onChange={handleInputChange('publisher')}
-                variant="outlined"
-              />
-            </Grid>
-
-            {/* Publication Details */}
-            <Grid item xs={12}>
-              <Typography variant="h6" className="text-gray-800 mb-3 mt-4">
-                Publication Details
-              </Typography>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="ISBN-13 *"
-                value={formData.isbn13}
-                onChange={handleInputChange('isbn13')}
-                variant="outlined"
-                required
-                inputProps={{ maxLength: 13 }}
-                helperText="13-digit ISBN number"
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Publication Date *"
-                value={formData.publication}
-                onChange={handleInputChange('publication')}
-                variant="outlined"
-                required
-                placeholder="e.g., 2024 or January 2024"
-                helperText="Publication year or date"
-              />
-            </Grid>
-
-            {/* Genres */}
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <InputLabel>Genres</InputLabel>
-                <Select
-                  multiple
-                  value={formData.genres}
-                  onChange={handleGenreChange}
-                  input={<OutlinedInput label="Genres" />}
-                  renderValue={(selected) => (
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                      {selected.map((value) => (
-                        <Chip key={value} label={value} size="small" />
-                      ))}
-                    </Box>
-                  )}
-                >
-                  {commonGenres.map((genre) => (
-                    <MenuItem key={genre} value={genre}>
-                      {genre}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {/* Additional Information */}
-            <Grid item xs={12}>
-              <Typography variant="h6" className="text-gray-800 mb-3 mt-4">
-                Additional Information
-              </Typography>
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Book Cover Image URL"
-                value={formData.image_url}
-                onChange={handleInputChange('image_url')}
-                variant="outlined"
-                placeholder="https://example.com/book-cover.jpg"
-                helperText="Optional: URL to book cover image"
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Description"
-                value={formData.description}
-                onChange={handleInputChange('description')}
-                variant="outlined"
-                multiline
-                rows={4}
-                placeholder="Brief description of the book..."
-              />
-            </Grid>
-
-            {/* Action Buttons */}
-            <Grid item xs={12}>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 3, mt: 3 }}>
-                <Button
-                  variant="outlined"
-                  onClick={handleCancel}
-                  disabled={loading}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={handleReset}
-                  disabled={loading}
-                >
-                  Reset Form
-                </Button>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  disabled={loading}
-                  startIcon={loading ? <CircularProgress size={20} /> : null}
-                >
-                  {loading ? 'Creating...' : 'Create Book'}
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
-        </Box>
-
-      {/* Preview Section */}
-      {(formData.title || formData.authors) && (
-        <Paper elevation={1} className="mt-6 p-4">
-          <Typography variant="h6" className="text-gray-800 mb-3">
-            Preview
-          </Typography>
-          <div className="flex gap-4">
-            <Box
-              component="img"
-              src={formData.image_url || '/placeholder-book.jpg'}
-              alt="Book preview"
-              sx={{
-                width: 80,
-                height: 120,
-                borderRadius: 1,
-                objectFit: 'cover',
-                backgroundColor: '#f5f5f5'
-              }}
-              onError={(e: any) => {
-                e.target.src = '/placeholder-book.jpg';
-              }}
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="ISBN-13 *"
+              value={formData.isbn13}
+              onChange={handleInputChange('isbn13')}
+              variant="outlined"
+              required
+              inputProps={{ maxLength: 13 }}
+              helperText="13-digit ISBN number"
             />
-            <div>
-              <Typography variant="subtitle1" className="font-semibold">
-                {formData.title || 'Book Title'}
-              </Typography>
-              <Typography variant="body2" className="text-gray-600">
-                by {formData.authors || 'Author Name'}
-              </Typography>
-              {formData.publication && (
-                <Typography variant="body2" className="text-gray-500">
-                  Published: {formData.publication}
-                </Typography>
-              )}
-              {formData.genres.length > 0 && (
-                <Box className="mt-2">
-                  {formData.genres.map((genre) => (
-                    <Chip key={genre} label={genre} size="small" className="mr-1" />
-                  ))}
-                </Box>
-              )}
-            </div>
-          </div>
-        </Paper>
-      )}
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="Publication Date *"
+              value={formData.publication}
+              onChange={handleInputChange('publication')}
+              variant="outlined"
+              required
+              placeholder="e.g., 2024 or January 2024"
+              helperText="Publication year or date"
+            />
+          </Grid>
+
+          {/* Genres */}
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <InputLabel>Genres</InputLabel>
+              <Select
+                multiple
+                value={formData.genres}
+                onChange={handleGenreChange}
+                input={<OutlinedInput label="Genres" />}
+                renderValue={(selected) => (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} size="small" />
+                    ))}
+                  </Box>
+                )}
+              >
+                {commonGenres.map((genre) => (
+                  <MenuItem key={genre} value={genre}>
+                    {genre}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+
+          {/* Additional Information */}
+          <Grid item xs={12}>
+            <Typography variant="h6" className="text-gray-800 mb-3 mt-4">
+              Additional Information
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Book Cover Image URL"
+              value={formData.image_url}
+              onChange={handleInputChange('image_url')}
+              variant="outlined"
+              placeholder="https://example.com/book-cover.jpg"
+              helperText="Optional: URL to book cover image"
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Description"
+              value={formData.description}
+              onChange={handleInputChange('description')}
+              variant="outlined"
+              multiline
+              rows={4}
+              placeholder="Brief description of the book..."
+            />
+          </Grid>
+
+          {/* Action Buttons */}
+          <Grid item xs={12}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 3, mt: 3 }}>
+              <Button
+                variant="outlined"
+                onClick={handleCancel}
+                disabled={loading}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={handleReset}
+                disabled={loading}
+              >
+                Reset Form
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={loading}
+                startIcon={loading ? <CircularProgress size={20} /> : null}
+              >
+                {loading ? 'Creating...' : 'Create Book'}
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
     </div>
   );
 }
