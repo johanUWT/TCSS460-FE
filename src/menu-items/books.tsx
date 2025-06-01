@@ -2,13 +2,13 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-import { BookRounded, Add } from '@mui/icons-material';
+import { BookRounded, BookOutlined, Add } from '@mui/icons-material';
 
 // type
 import { NavItemType } from 'types/menu';
 
 // icons
-const icons = { BookRounded, PlusOne: Add };
+const icons = { BookRounded, BookOutlined, PlusOne: Add };
 
 // ==============================|| MENU ITEMS - PAGES ||============================== //
 
@@ -18,11 +18,18 @@ const pages: NavItemType = {
   type: 'group',
   children: [
     {
-      id: 'list-books',
-      title: <FormattedMessage id="list-books" />,
+      id: 'search-books',
+      title: <FormattedMessage id="search-books" />,
       type: 'item',
       url: '/books',
       icon: icons.BookRounded
+    },
+    {
+      id: 'list-books',
+      title: <FormattedMessage id="list-books" />,
+      type: 'item',
+      url: '/books/all',
+      icon: icons.BookOutlined
     }
     // {
     //   id: 'create-book',
