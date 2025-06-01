@@ -47,9 +47,21 @@ const initialFormData: CreateBookFormData = {
 };
 
 const commonGenres = [
-  'Fiction', 'Non-Fiction', 'Mystery', 'Romance', 'Science Fiction', 
-  'Fantasy', 'Biography', 'History', 'Self-Help', 'Business',
-  'Technology', 'Art', 'Poetry', 'Drama', 'Adventure'
+  'Fiction',
+  'Non-Fiction',
+  'Mystery',
+  'Romance',
+  'Science Fiction',
+  'Fantasy',
+  'Biography',
+  'History',
+  'Self-Help',
+  'Business',
+  'Technology',
+  'Art',
+  'Poetry',
+  'Drama',
+  'Adventure'
 ];
 
 export default function CreateBookPage() {
@@ -59,11 +71,9 @@ export default function CreateBookPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const handleInputChange = (field: keyof CreateBookFormData) => (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleInputChange = (field: keyof CreateBookFormData) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = field === 'pages' ? (event.target.value === '' ? '' : Number(event.target.value)) : event.target.value;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [field]: value
     }));
@@ -71,7 +81,7 @@ export default function CreateBookPage() {
 
   const handleGenreChange = (event: any) => {
     const value = typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       genres: value
     }));
@@ -84,7 +94,7 @@ export default function CreateBookPage() {
     if (formData.isbn13.length !== 13) return 'ISBN-13 must be exactly 13 digits';
     if (!formData.publication.trim()) return 'Publication date is required';
     if (formData.pages && formData.pages <= 0) return 'Pages must be a positive number';
-    
+
     return null;
   };
 
@@ -103,7 +113,7 @@ export default function CreateBookPage() {
     try {
       // TODO: Replace with actual API call when ready to connect to 3rd-party Book API
       // For now, we'll simulate the API call
-      
+
       const bookData = {
         title: formData.title,
         original_title: formData.original_title || formData.title,
@@ -130,12 +140,12 @@ export default function CreateBookPage() {
       };
 
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       console.log('Book data to be created:', bookData);
-      
+
       setSuccess(true);
-      
+
       // Reset form after successful submission
       setTimeout(() => {
         setFormData(initialFormData);
@@ -143,7 +153,6 @@ export default function CreateBookPage() {
         // Optionally redirect to books list
         // router.push('/books');
       }, 2000);
-
     } catch (err) {
       console.error('Error creating book:', err);
       setError('Failed to create book. Please try again.');
@@ -167,7 +176,7 @@ export default function CreateBookPage() {
       <Typography variant="h4" component="h1" gutterBottom className="text-gray-900 font-bold">
         Create New Book Entry
       </Typography>
-      
+
       <Typography variant="body1" className="text-gray-600 mb-6">
         Fill in the information below to add a new book to the library.
       </Typography>
@@ -189,24 +198,11 @@ export default function CreateBookPage() {
           {/* Basic Information */}
 
           <Grid item xs={12} md={8}>
-            <TextField
-              fullWidth
-              label="Title *"
-              value={formData.title}
-              onChange={handleInputChange('title')}
-              variant="outlined"
-              required
-            />
+            <TextField fullWidth label="Title *" value={formData.title} onChange={handleInputChange('title')} variant="outlined" required />
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <TextField
-              fullWidth
-              label="Language"
-              value={formData.language}
-              onChange={handleInputChange('language')}
-              variant="outlined"
-            />
+            <TextField fullWidth label="Language" value={formData.language} onChange={handleInputChange('language')} variant="outlined" />
           </Grid>
 
           <Grid item xs={12} md={8}>
@@ -348,26 +344,13 @@ export default function CreateBookPage() {
           {/* Action Buttons */}
           <Grid item xs={12}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 3, mt: 3 }}>
-              <Button
-                variant="outlined"
-                onClick={handleCancel}
-                disabled={loading}
-              >
+              <Button variant="outlined" onClick={handleCancel} disabled={loading}>
                 Cancel
               </Button>
-              <Button
-                variant="outlined"
-                onClick={handleReset}
-                disabled={loading}
-              >
+              <Button variant="outlined" onClick={handleReset} disabled={loading}>
                 Reset Form
               </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                disabled={loading}
-                startIcon={loading ? <CircularProgress size={20} /> : null}
-              >
+              <Button type="submit" variant="contained" disabled={loading} startIcon={loading ? <CircularProgress size={20} /> : null}>
                 {loading ? 'Creating...' : 'Create Book'}
               </Button>
             </Box>
