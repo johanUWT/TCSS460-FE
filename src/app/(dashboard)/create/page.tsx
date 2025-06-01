@@ -354,7 +354,7 @@ export default function CreateBookPage() {
 
             {/* Action Buttons */}
             <Grid item xs={12}>
-              <Box className="flex gap-3 justify-end mt-6">
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 3, mt: 3 }}>
                 <Button
                   variant="outlined"
                   onClick={handleCancel}
