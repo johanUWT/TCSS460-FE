@@ -3,7 +3,7 @@ import BooksList from 'views/books/books-list';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { IBook } from 'types/book';
-import { Box, Container, Input, InputLabel, Stack, Select, MenuItem, FormHelperText, Pagination } from '@mui/material';
+import { Box, Container, Input, InputLabel, Stack, Select, MenuItem, FormHelperText, Pagination, Button } from '@mui/material';
 import { Formik, FormikErrors } from 'formik';
 import * as Yup from 'yup';
 import axios from 'utils/axios';
@@ -118,10 +118,10 @@ export default function BooksListPage() {
                 <MenuItem value="year">Year</MenuItem>
               </Select>
             </Stack>
-            <Box sx={{ textAlign: 'right' }}>
-              <button type="submit" className="btn btn-primary">
+            <Box sx={{ textAlign: 'left' }}>
+              <Button type="submit" variant="contained" color="primary" disabled={!values.query || !values.category}>
                 Search
-              </button>
+              </Button>
             </Box>
           </form>
         )}
