@@ -186,15 +186,14 @@ export default function CreateBookPage() {
         </Alert>
       )}
 
-      <Paper elevation={2} className="p-6">
-        <Box component="form" onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            {/* Basic Information */}
-            <Grid item xs={12}>
-              <Typography variant="h6" className="text-gray-800 mb-3">
-                Basic Information
-              </Typography>
-            </Grid>
+      <Box component="form" onSubmit={handleSubmit}>
+        <Grid container spacing={3}>
+          {/* Basic Information */}
+          <Grid item xs={12}>
+            <Typography variant="h6" className="text-gray-800 mb-3">
+              Basic Information
+            </Typography>
+          </Grid>
 
             <Grid item xs={12} md={8}>
               <TextField
@@ -382,7 +381,6 @@ export default function CreateBookPage() {
             </Grid>
           </Grid>
         </Box>
-      </Paper>
 
       {/* Preview Section */}
       {(formData.title || formData.authors) && (
