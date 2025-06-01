@@ -1,23 +1,74 @@
 'use client';
-// import BooksList from 'views/books/books-list';
-// import { useRouter } from 'next/navigation';
-// import { useState } from 'react';
-// import { IBook } from 'types/book';
-import { Box, Container, Input, InputLabel, Stack, Select, MenuItem, FormHelperText } from '@mui/material';
-import { Formik } from 'formik';
+import BooksList from 'views/books/books-list';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { IBook } from 'types/book';
+import { Box, Container, Input, InputLabel, Stack, Select, MenuItem, FormHelperText, Pagination } from '@mui/material';
+import { Formik, FormikErrors } from 'formik';
 import * as Yup from 'yup';
 import axios from 'utils/axios';
-import { AxiosResponse } from 'axios';
 
-// ==============================|| BOOKS LIST PAGE ||============================== //
+const LIMIT = 10; // Default limit
 
 export default function BooksListPage() {
-  // const router = useRouter();
-  // const [books, setBooks] = useState<IBook[]>([]);
+  const router = useRouter();
+  const [books, setBooks] = useState<IBook[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [searchParams, setSearchParams] = useState<{ query: string; category: string } | null>(null);
 
-  function handleResponse(res: AxiosResponse) {
-    console.log('Search results:', res.data);
+  const fetchBooks = async (query: string, category: string, page: number) => {
+    const offset = (page - 1) * LIMIT;
+
+    try {
+      const res = await axios.get(`/book/${category}/${query}`, {
+        params: { limit: LIMIT, offset }
+      });
+
+      const data = res.data;
+
+      console.log('Fetched books:', data);
+
+      if (data.entries) {
+        setBooks(data.entries);
+        // Get the total number of pages based on the total records and limit
+        const totalRecords = data.pagination?.totalRecords ?? data.entries.length;
+        setTotalPages(Math.ceil(totalRecords / LIMIT));
+      } else if (data.entry) {
+        setBooks([data.entry]);
+        setTotalPages(1);
+      } else {
+        setBooks([]);
+        setTotalPages(1);
+      }
+    } catch (error) {
+      console.error('Error fetching books:', error);
+      setBooks([]);
+      setTotalPages(1);
+    }
+  };
+
+  function handleSubmit(
+    values: { query: string; category: string },
+    setErrors: (
+      errors: FormikErrors<{
+        query: string;
+        category: string;
+      }>
+    ) => void,
+    setSubmitting: (isSubmitting: boolean) => void
+  ) {
+    setSubmitting(true);
+    setPage(1); // Reset to page 1 on new search
+    setSearchParams(values); // Trigger useEffect
+    setSubmitting(false);
   }
+
+  useEffect(() => {
+    if (searchParams) {
+      fetchBooks(searchParams.query, searchParams.category, page);
+    }
+  }, [searchParams, page]);
 
   return (
     <Container>
@@ -33,19 +84,7 @@ export default function BooksListPage() {
           category: Yup.string().oneOf(['title', 'author', 'isbn', 'rating', 'year'], 'Invalid search category')
         })}
         onSubmit={(values, { setErrors, setSubmitting }) => {
-          setSubmitting(true);
-          axios
-            .get(`/book/${values.category}/${values.query}`)
-            .then((res) => {
-              handleResponse(res);
-            })
-            .catch((error) => {
-              console.error('Error fetching books:', error);
-              setErrors({ query: 'No books found for this query' });
-            })
-            .finally(() => {
-              setSubmitting(false);
-            });
+          handleSubmit(values, setErrors, setSubmitting);
         }}
       >
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
@@ -87,6 +126,14 @@ export default function BooksListPage() {
           </form>
         )}
       </Formik>
+
+      <BooksList books={books} />
+
+      {books.length > 0 && (
+        <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+          <Pagination count={totalPages} page={page} onChange={(_, value) => setPage(value)} color="primary" />
+        </Box>
+      )}
     </Container>
   );
 }

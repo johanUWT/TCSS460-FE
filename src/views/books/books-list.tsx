@@ -12,7 +12,7 @@ export default function BooksList({ books }: { books: IBook[] }) {
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Book Library</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Book List</h1>
       </div>
 
       {/* Books grid */}
@@ -21,6 +21,12 @@ export default function BooksList({ books }: { books: IBook[] }) {
           <BookCard key={book.id} book={book} />
         ))}
       </div>
+      {/* No books found message */}
+      {books.length === 0 && (
+        <div className="text-center text-gray-500 mt-8">
+          <p>No books to display.</p>
+        </div>
+      )}
 
       {/* Footer note */}
       <div className="mt-12 text-center"></div>
