@@ -67,3 +67,28 @@ We met over Discord to peer program some requirements
 #### Comments
 
 N/A
+
+### Beta II Sprint
+
+_5/25/2025 - 5/31/2025_
+
+#### Contributions
+
+- Johan Hernandez
+  - Created pages to search for and view books
+- Sopheanith Ny
+  - Created page to create books
+- Yonas Omega
+  - Designed UI/UX for deleting a book
+- Austin Bomhold
+  - Created form for changing password
+
+#### Meetings
+
+_5/29/2025_
+
+We met in person to peer program and discuss final requirements for this sprint
+
+#### Comments
+
+N/A

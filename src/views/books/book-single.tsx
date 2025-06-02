@@ -2,10 +2,10 @@
 import { LinearProgress, Box, Divider, Rating, Stack, Typography, Skeleton, IconButton, Button, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import books from 'mockData.json';
-import { notFound } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { IBook } from 'types/book';
 import { useEffect, useState } from 'react';
+import axios from 'utils/axios';
 
 const getRatingPercentage = (count: number, total: number) => (total === 0 ? 0 : (count / total) * 100);
 
@@ -14,14 +14,13 @@ export default function BookSingle({ isbn }: { isbn: string }) {
   const [starCounts, setStarCounts] = useState<Record<number, number> | null>(null);
   const [initialCounts, setInitialCounts] = useState<Record<number, number> | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchBook() {
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate network delay
-      const bookData = books.find((book) => book.isbn13 === Number(isbn));
-      if (!bookData) {
-        notFound();
-      } else {
+      try {
+        const bookResponse = await axios.get(`/book/isbn/${isbn}`);
+        const bookData = bookResponse.data.entry as IBook;
         const initial = {
           5: bookData.ratings.rating_5,
           4: bookData.ratings.rating_4,
@@ -33,10 +32,13 @@ export default function BookSingle({ isbn }: { isbn: string }) {
         setStarCounts(initial);
         setInitialCounts(initial);
         setHasChanges(false);
+      } catch (error) {
+        console.error('Error fetching book:', error);
+        router.push('/404'); // Redirect to 404 if book not found
       }
     }
     fetchBook();
-  }, [isbn]);
+  }, [isbn, router]);
 
   // Warn user if there are unsaved changes
   useEffect(() => {
@@ -68,8 +70,27 @@ export default function BookSingle({ isbn }: { isbn: string }) {
 
   const handleRatingSubmit = () => {
     console.log('Submitted star counts:', starCounts);
-    setInitialCounts({ ...starCounts });
-    setHasChanges(false);
+    axios
+      .patch('/book/rating', {
+        id: book.id,
+        rating_1_star: starCounts[1],
+        rating_2_star: starCounts[2],
+        rating_3_star: starCounts[3],
+        rating_4_star: starCounts[4],
+        rating_5_star: starCounts[5]
+      })
+      .then(() => {
+        console.log('Rating updated successfully');
+        setInitialCounts({ ...starCounts });
+      })
+      .catch((error) => {
+        console.error('Error updating rating:', error);
+        alert('Failed to update rating. Please try again later.');
+        setStarCounts({ ...initialCounts }); // Reset to initial counts on error
+      })
+      .finally(() => {
+        setHasChanges(false);
+      });
   };
 
   return (
