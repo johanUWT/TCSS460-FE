@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -9,60 +8,32 @@ import {
   Typography,
   Grid,
   Alert,
-  CircularProgress,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Chip,
-  OutlinedInput
+  CircularProgress
 } from '@mui/material';
 
 interface CreateBookFormData {
+  id: string;
   title: string;
   original_title: string;
   authors: string;
   isbn13: string;
   publication: string;
   publisher: string;
-  language: string;
-  pages: number | '';
   description: string;
-  genres: string[];
   image_url: string;
 }
 
 const initialFormData: CreateBookFormData = {
+  id: '',
   title: '',
   original_title: '',
   authors: '',
   isbn13: '',
   publication: '',
   publisher: '',
-  language: 'English',
-  pages: '',
   description: '',
-  genres: [],
   image_url: ''
 };
-
-const commonGenres = [
-  'Fiction',
-  'Non-Fiction',
-  'Mystery',
-  'Romance',
-  'Science Fiction',
-  'Fantasy',
-  'Biography',
-  'History',
-  'Self-Help',
-  'Business',
-  'Technology',
-  'Art',
-  'Poetry',
-  'Drama',
-  'Adventure'
-];
 
 export default function CreateBookPage() {
   const router = useRouter();
@@ -71,30 +42,23 @@ export default function CreateBookPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const handleInputChange = (field: keyof CreateBookFormData) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const value = field === 'pages' ? (event.target.value === '' ? '' : Number(event.target.value)) : event.target.value;
-    setFormData((prev) => ({
+  const handleInputChange = (field: keyof CreateBookFormData) => (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData(prev => ({
       ...prev,
-      [field]: value
-    }));
-  };
-
-  const handleGenreChange = (event: any) => {
-    const value = typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      genres: value
+      [field]: event.target.value
     }));
   };
 
   const validateForm = (): string | null => {
+    if (!formData.id.trim()) return 'Book ID is required';
     if (!formData.title.trim()) return 'Title is required';
     if (!formData.authors.trim()) return 'Author(s) is required';
     if (!formData.isbn13.trim()) return 'ISBN-13 is required';
     if (formData.isbn13.length !== 13) return 'ISBN-13 must be exactly 13 digits';
     if (!formData.publication.trim()) return 'Publication date is required';
-    if (formData.pages && formData.pages <= 0) return 'Pages must be a positive number';
-
+    
     return null;
   };
 
@@ -115,20 +79,16 @@ export default function CreateBookPage() {
       // For now, we'll simulate the API call
 
       const bookData = {
+        id: formData.id,
         title: formData.title,
         original_title: formData.original_title || formData.title,
         authors: formData.authors,
         isbn13: formData.isbn13,
         publication: formData.publication,
         publisher: formData.publisher,
-        language: formData.language,
-        pages: formData.pages || 0,
         description: formData.description,
-        genres: formData.genres,
-        // Image handling - adjust based on your API requirements
         image_url: formData.image_url,
         // Default values for new books
-        id: Date.now(), // Temporary ID, API should generate real one
         ratings: {
           average: 0,
           count: 0
@@ -196,16 +156,18 @@ export default function CreateBookPage() {
       <Box component="form" onSubmit={handleSubmit}>
         <Grid container spacing={3}>
           {/* Basic Information */}
-
-          <Grid item xs={12} md={8}>
-            <TextField fullWidth label="Title *" value={formData.title} onChange={handleInputChange('title')} variant="outlined" required />
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Title *"
+              value={formData.title}
+              onChange={handleInputChange('title')}
+              variant="outlined"
+              required
+            />
           </Grid>
 
-          <Grid item xs={12} md={4}>
-            <TextField fullWidth label="Language" value={formData.language} onChange={handleInputChange('language')} variant="outlined" />
-          </Grid>
-
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12}>
             <TextField
               fullWidth
               label="Original Title"
@@ -213,18 +175,6 @@ export default function CreateBookPage() {
               onChange={handleInputChange('original_title')}
               variant="outlined"
               helperText="Leave blank if same as title"
-            />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <TextField
-              fullWidth
-              label="Pages"
-              type="number"
-              value={formData.pages}
-              onChange={handleInputChange('pages')}
-              variant="outlined"
-              inputProps={{ min: 1 }}
             />
           </Grid>
 
@@ -283,30 +233,16 @@ export default function CreateBookPage() {
             />
           </Grid>
 
-          {/* Genres */}
           <Grid item xs={12}>
-            <FormControl fullWidth>
-              <InputLabel>Genres</InputLabel>
-              <Select
-                multiple
-                value={formData.genres}
-                onChange={handleGenreChange}
-                input={<OutlinedInput label="Genres" />}
-                renderValue={(selected) => (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} size="small" />
-                    ))}
-                  </Box>
-                )}
-              >
-                {commonGenres.map((genre) => (
-                  <MenuItem key={genre} value={genre}>
-                    {genre}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <TextField
+              fullWidth
+              label="Book ID *"
+              value={formData.id}
+              onChange={handleInputChange('id')}
+              variant="outlined"
+              required
+              helperText="Unique identifier for the book"
+            />
           </Grid>
 
           {/* Additional Information */}
