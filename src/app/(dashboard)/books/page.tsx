@@ -33,11 +33,12 @@ export default function BooksListPage() {
       });
 
       const data = res.data;
+      console.log(data);
 
       if (data.entries) {
         setBooks(data.entries);
         const totalRecords = data.pagination?.totalRecords ?? data.entries.length;
-        setTotalPages(Math.ceil(totalRecords / LIMIT));
+        setTotalPages(data.pagination ? Math.ceil(totalRecords / LIMIT) : 1);
       } else if (data.entry) {
         setBooks([data.entry]);
         setTotalPages(1);
