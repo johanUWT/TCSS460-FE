@@ -1,5 +1,5 @@
 'use client';
-import { LinearProgress, Box, Divider, Rating, Stack, Typography, Skeleton, IconButton, Button, TextField } from '@mui/material';
+import { LinearProgress, Box, Divider, Rating, Stack, Typography, Skeleton, IconButton, Button, TextField, Snackbar } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,9 @@ export default function BookSingle({ isbn }: { isbn: string }) {
   const [book, setBook] = useState<IBook | null>(null);
   const [starCounts, setStarCounts] = useState<Record<number, number> | null>(null);
   const [initialCounts, setInitialCounts] = useState<Record<number, number> | null>(null);
+  const [previousCounts, setPreviousCounts] = useState<Record<number, number> | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -34,24 +36,40 @@ export default function BookSingle({ isbn }: { isbn: string }) {
         setHasChanges(false);
       } catch (error) {
         console.error('Error fetching book:', error);
-        router.push('/404'); // Redirect to 404 if book not found
+        router.push('/404');
       }
     }
     fetchBook();
   }, [isbn, router]);
 
-  // Warn user if there are unsaved changes
+  // Warn user on browser reload
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (hasChanges) {
         e.preventDefault();
+        e.returnValue = '';
       }
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [hasChanges]);
 
-  // Check for changes
+  // Warn user on Next.js route change
+  useEffect(() => {
+    const handleRouteChangeStart = (url: string) => {
+      if (hasChanges && !window.confirm('You have unsaved changes. Are you sure you want to leave?')) {
+        throw 'Abort route change. Prevented navigation.';
+      }
+    };
+    // @ts-ignore
+    router.events?.on?.('routeChangeStart', handleRouteChangeStart);
+    return () => {
+      // @ts-ignore
+      router.events?.off?.('routeChangeStart', handleRouteChangeStart);
+    };
+  }, [hasChanges, router]);
+
+  // Watch for changes
   useEffect(() => {
     if (!starCounts || !initialCounts) return;
     const changed = [1, 2, 3, 4, 5].some((star) => starCounts[star] !== initialCounts[star]);
@@ -69,7 +87,7 @@ export default function BookSingle({ isbn }: { isbn: string }) {
       : ((1 * starCounts[1] + 2 * starCounts[2] + 3 * starCounts[3] + 4 * starCounts[4] + 5 * starCounts[5]) / total).toFixed(1);
 
   const handleRatingSubmit = () => {
-    console.log('Submitted star counts:', starCounts);
+    setPreviousCounts({ ...initialCounts }); // store previous
     axios
       .patch('/book/rating', {
         id: book.id,
@@ -80,25 +98,44 @@ export default function BookSingle({ isbn }: { isbn: string }) {
         rating_5_star: starCounts[5]
       })
       .then(() => {
-        console.log('Rating updated successfully');
         setInitialCounts({ ...starCounts });
+        setSnackbarOpen(true);
       })
       .catch((error) => {
         console.error('Error updating rating:', error);
         alert('Failed to update rating. Please try again later.');
-        setStarCounts({ ...initialCounts }); // Reset to initial counts on error
+        setStarCounts({ ...initialCounts });
       })
       .finally(() => {
         setHasChanges(false);
       });
   };
 
+  const handleUndo = () => {
+    if (previousCounts) {
+      setStarCounts({ ...previousCounts });
+      setInitialCounts({ ...previousCounts });
+      handleRatingSubmit(); // Re-submit with previous counts
+    }
+  };
+
   return (
     <Box sx={{ maxWidth: 900, mx: 'auto', p: 4 }}>
-      {/* Title and Image */}
+      <Snackbar
+        color="primary"
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        message="Rating updated successfully!"
+        action={
+          <Button color="primary" size="small" onClick={handleUndo}>
+            UNDO
+          </Button>
+        }
+      />
+
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={4} alignItems="flex-start">
         <Box component="img" src={book.icons.large} alt={book.title} sx={{ width: 200, borderRadius: 2 }} />
-
         <Box>
           <Typography variant="h4" gutterBottom>
             {book.title}
@@ -120,7 +157,6 @@ export default function BookSingle({ isbn }: { isbn: string }) {
 
       <Divider sx={{ my: 4 }} />
 
-      {/* Rating Section */}
       <Box>
         <Typography variant="h1" gutterBottom>
           {average}
@@ -142,13 +178,11 @@ export default function BookSingle({ isbn }: { isbn: string }) {
             return (
               <Stack key={stars} direction="row" spacing={1} alignItems="center">
                 <Typography sx={{ width: 40 }}>{stars}★</Typography>
-
                 <LinearProgress
                   variant="determinate"
                   value={getRatingPercentage(count, total)}
                   sx={{ flex: 1, height: 8, borderRadius: 2 }}
                 />
-
                 <Typography sx={{ width: 50, textAlign: 'right' }}>{getRatingPercentage(count, total).toFixed(0)}%</Typography>
 
                 <Box
@@ -165,7 +199,7 @@ export default function BookSingle({ isbn }: { isbn: string }) {
                     size="small"
                     onClick={() =>
                       setStarCounts((prev) => ({
-                        ...prev,
+                        ...prev!,
                         [stars]: Math.max(0, prev![stars] - 1)
                       }))
                     }
@@ -181,7 +215,7 @@ export default function BookSingle({ isbn }: { isbn: string }) {
                       const val = parseInt(e.target.value, 10);
                       if (!isNaN(val) && val >= 0) {
                         setStarCounts((prev) => ({
-                          ...prev,
+                          ...prev!,
                           [stars]: val
                         }));
                       }
@@ -195,7 +229,7 @@ export default function BookSingle({ isbn }: { isbn: string }) {
                     size="small"
                     onClick={() =>
                       setStarCounts((prev) => ({
-                        ...prev,
+                        ...prev!,
                         [stars]: prev![stars] + 1
                       }))
                     }
