@@ -64,11 +64,8 @@ export default function CreateBookPage() {
     setLoading(true);
 
     try {
-      // TODO: Replace with actual API call when ready to connect to 3rd-party Book API
-      // For now, we'll simulate the API call
-
       const bookData = {
-        id: Math.floor(Math.random() * (Math.pow(2, 32) - Math.pow(2, 31))) + Math.pow(2, 31), // Generate a random ID for the book
+        id: Math.floor(Math.random() * (Math.pow(2, 31) - Math.pow(2, 30) - 1)) + Math.pow(2, 30), // Generate a random ID for the book
         isbn13: formData.isbn13,
         authors: formData.authors,
         publication_year: formData.publication,
@@ -96,7 +93,7 @@ export default function CreateBookPage() {
         setFormData(initialFormData);
         setSuccess(false);
         // Optionally redirect to books list
-        // router.push('/books');
+        router.push(`/books/${bookData.isbn13}`);
       }, 2000);
     } catch (err) {
       console.error('Error creating book:', err);
