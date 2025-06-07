@@ -1,5 +1,5 @@
 'use client';
-import { LinearProgress, Box, Divider, Rating, Stack, Typography, Skeleton, IconButton, Button, TextField, Snackbar } from '@mui/material';
+import { Box, Button, Divider, IconButton, LinearProgress, Rating, Skeleton, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useRouter } from 'next/navigation';
@@ -39,6 +39,7 @@ export default function BookSingle({ isbn }: { isbn: string }) {
         router.push('/404');
       }
     }
+
     fetchBook();
   }, [isbn, router]);
 
@@ -116,6 +117,20 @@ export default function BookSingle({ isbn }: { isbn: string }) {
       setStarCounts({ ...previousCounts });
       setInitialCounts({ ...previousCounts });
       handleRatingSubmit(); // Re-submit with previous counts
+    }
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this book?')) {
+      axios
+        .delete(`/book/isbn/${book.isbn13}`)
+        .then(() => {
+          router.push('/books');
+        })
+        .catch((error) => {
+          console.error('Error deleting book:', error);
+          alert('Failed to delete book. Please try again later.');
+        });
     }
   };
 
@@ -242,8 +257,12 @@ export default function BookSingle({ isbn }: { isbn: string }) {
           })}
         </Stack>
 
-        <Button variant="contained" sx={{ mt: 3 }} onClick={handleRatingSubmit} disabled={!hasChanges}>
+        <Button variant="contained" sx={{ mt: 3, width: '100%' }} onClick={handleRatingSubmit} disabled={!hasChanges}>
           Submit
+        </Button>
+
+        <Button variant="contained" sx={{ mt: 3, background: 'red', width: '100%' }} onClick={handleDelete}>
+          Delete
         </Button>
       </Box>
     </Box>
