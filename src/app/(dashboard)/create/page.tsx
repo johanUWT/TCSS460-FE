@@ -1,15 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Grid,
-  Alert,
-  CircularProgress
-} from '@mui/material';
+import { Box, TextField, Button, Typography, Grid, Alert, CircularProgress } from '@mui/material';
+import axios from 'utils/axios';
 
 interface CreateBookFormData {
   id: string;
@@ -18,8 +11,6 @@ interface CreateBookFormData {
   authors: string;
   isbn13: string;
   publication: string;
-  publisher: string;
-  description: string;
   image_url: string;
 }
 
@@ -30,10 +21,10 @@ const initialFormData: CreateBookFormData = {
   authors: '',
   isbn13: '',
   publication: '',
-  publisher: '',
-  description: '',
   image_url: ''
 };
+
+const DEFAULT_IMAGE_URL = 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png';
 
 export default function CreateBookPage() {
   const router = useRouter();
@@ -42,23 +33,21 @@ export default function CreateBookPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const handleInputChange = (field: keyof CreateBookFormData) => (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData(prev => ({
+  const handleInputChange = (field: keyof CreateBookFormData) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData((prev) => ({
       ...prev,
       [field]: event.target.value
     }));
   };
 
   const validateForm = (): string | null => {
-    if (!formData.id.trim()) return 'Book ID is required';
     if (!formData.title.trim()) return 'Title is required';
     if (!formData.authors.trim()) return 'Author(s) is required';
     if (!formData.isbn13.trim()) return 'ISBN-13 is required';
     if (formData.isbn13.length !== 13) return 'ISBN-13 must be exactly 13 digits';
-    if (!formData.publication.trim()) return 'Publication date is required';
-    
+    if (!formData.publication.trim() || !Number.isInteger(Number(formData.publication)))
+      return 'Publication year is required and must be an integer';
+
     return null;
   };
 
@@ -75,35 +64,28 @@ export default function CreateBookPage() {
     setLoading(true);
 
     try {
-      // TODO: Replace with actual API call when ready to connect to 3rd-party Book API
-      // For now, we'll simulate the API call
-
       const bookData = {
-        id: formData.id,
-        title: formData.title,
-        original_title: formData.original_title || formData.title,
-        authors: formData.authors,
+        id: Math.floor(Math.random() * (Math.pow(2, 31) - Math.pow(2, 30) - 1)) + Math.pow(2, 30), // Generate a random ID for the book
         isbn13: formData.isbn13,
-        publication: formData.publication,
-        publisher: formData.publisher,
-        description: formData.description,
-        image_url: formData.image_url,
-        // Default values for new books
-        ratings: {
-          average: 0,
-          count: 0
-        },
-        icons: {
-          large: formData.image_url || '/placeholder-book.jpg',
-          small: formData.image_url || '/placeholder-book.jpg'
-        }
+        authors: formData.authors,
+        publication_year: formData.publication,
+        original_title: formData.original_title || formData.title,
+        title: formData.title,
+        rating_avg: 0,
+        rating_count: 0,
+        ratings_1_star: 0,
+        ratings_2_star: 0,
+        ratings_3_star: 0,
+        ratings_4_star: 0,
+        ratings_5_star: 0,
+        image_url: formData.image_url || DEFAULT_IMAGE_URL,
+        image_small_url: formData.image_url || DEFAULT_IMAGE_URL
       };
-
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       console.log('Book data to be created:', bookData);
 
+      const response = await axios.post('/book', bookData);
+      console.log('Book created successfully:', response.data);
       setSuccess(true);
 
       // Reset form after successful submission
@@ -111,7 +93,7 @@ export default function CreateBookPage() {
         setFormData(initialFormData);
         setSuccess(false);
         // Optionally redirect to books list
-        // router.push('/books');
+        router.push(`/books/${bookData.isbn13}`);
       }, 2000);
     } catch (err) {
       console.error('Error creating book:', err);
@@ -157,14 +139,7 @@ export default function CreateBookPage() {
         <Grid container spacing={3}>
           {/* Basic Information */}
           <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Title *"
-              value={formData.title}
-              onChange={handleInputChange('title')}
-              variant="outlined"
-              required
-            />
+            <TextField fullWidth label="Title" value={formData.title} onChange={handleInputChange('title')} variant="outlined" required />
           </Grid>
 
           <Grid item xs={12}>
@@ -181,22 +156,12 @@ export default function CreateBookPage() {
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label="Author(s) *"
+              label="Author(s)"
               value={formData.authors}
               onChange={handleInputChange('authors')}
               variant="outlined"
               required
               helperText="Separate multiple authors with commas"
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Publisher"
-              value={formData.publisher}
-              onChange={handleInputChange('publisher')}
-              variant="outlined"
             />
           </Grid>
 
@@ -210,7 +175,7 @@ export default function CreateBookPage() {
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label="ISBN-13 *"
+              label="ISBN-13"
               value={formData.isbn13}
               onChange={handleInputChange('isbn13')}
               variant="outlined"
@@ -223,25 +188,13 @@ export default function CreateBookPage() {
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label="Publication Date *"
+              label="Publication Year"
               value={formData.publication}
               onChange={handleInputChange('publication')}
               variant="outlined"
               required
-              placeholder="e.g., 2024 or January 2024"
-              helperText="Publication year or date"
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Book ID *"
-              value={formData.id}
-              onChange={handleInputChange('id')}
-              variant="outlined"
-              required
-              helperText="Unique identifier for the book"
+              placeholder="e.g., 2024"
+              helperText="Year the book was published"
             />
           </Grid>
 
@@ -261,19 +214,6 @@ export default function CreateBookPage() {
               variant="outlined"
               placeholder="https://example.com/book-cover.jpg"
               helperText="Optional: URL to book cover image"
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Description"
-              value={formData.description}
-              onChange={handleInputChange('description')}
-              variant="outlined"
-              multiline
-              rows={4}
-              placeholder="Brief description of the book..."
             />
           </Grid>
 

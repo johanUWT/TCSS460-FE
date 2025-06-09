@@ -92,3 +92,26 @@ We met in person to peer program and discuss final requirements for this sprint
 #### Comments
 
 N/A
+
+### Production Sprint
+
+_6/01/2025 - 6/07/2025_
+
+#### Contributions
+
+- Johan Hernandez
+  - Finished page to create books
+- Sopheanith Ny
+- Yonas Omega
+- Austin Bomhold
+  - Added feature to delete books
+
+#### Meetings
+
+_6/05/2025_
+
+We met in person to peer program and discuss final requirements for this sprint and the overall production submission
+
+#### Comments
+
+Fixed error in our API documentation
